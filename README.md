@@ -153,5 +153,3 @@ jwt.refreshExpiration=86400000  # 24 hours
 ```bash
 ./mvnw spring-boot:run
 ```
-
-Make sure PostgreSQL is running and the `jwtpoc` database exists, or switch the datasource to H2 for local testing.
