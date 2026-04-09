@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
         return ResponseEntity.ok("User registered successfully");
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found"));
