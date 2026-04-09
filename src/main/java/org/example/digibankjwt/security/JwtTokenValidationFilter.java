@@ -5,8 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.digibankjwt.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -36,7 +36,13 @@ public class JwtTokenValidationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             String type = jwtService.extractTokenType(token);
 
-            // 👇 Only allow access tokens
+
+            //Debug
+            System.out.println("Authorization header: " + header);
+            System.out.println("Token type: " + type);
+            System.out.println("JWT role: " +  jwtService.extractUserRole(token));
+
+            // Only allow access tokens
             if ("access".equals(type)) {
                 String username = jwtService.extractUsername(token);
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

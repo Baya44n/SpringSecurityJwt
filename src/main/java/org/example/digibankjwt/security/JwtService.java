@@ -22,10 +22,12 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails, long expirationMillis, boolean isRefresh) {
+        String role = userDetails.getAuthorities().stream().map(auth-> auth.getAuthority()).findFirst().orElse("ROLE_USER");
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("role", userDetails.getAuthorities())
-                .claim("type", isRefresh ? "refresh" : "access") //  add token type claim
+                .claim("role", role)
+                .claim("type", isRefresh ? "refresh" : "access") //  add token type
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -42,6 +44,16 @@ public class JwtService {
     }
 
 
+    public String extractUserRole(String token){
+        return Jwts.parserBuilder() // build the jwt parser
+                .setSigningKey(secretKey) // with our secretKey
+                .build()
+                .parseClaimsJws(token)// parse the token
+                .getBody()// gives all the payload
+                .get("role",String.class); // extract the role
+    }
+
+
     public String extractUsername(String token){
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -50,6 +62,8 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
+
 
     public boolean isTokenExpired(String token){
         Date expiration = Jwts.parserBuilder()
@@ -65,4 +79,5 @@ public class JwtService {
         String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
+
 }

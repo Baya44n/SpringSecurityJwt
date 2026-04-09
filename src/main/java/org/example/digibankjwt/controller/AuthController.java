@@ -37,7 +37,10 @@ public class AuthController {
         String accessToken = jwtService.generateToken(userDetails, props.getExpiration(), false);
         String refreshToken = jwtService.generateToken(userDetails, props.getRefreshExpiration(), true);
 
-        return ResponseEntity.ok(Map.of("accessToken", accessToken, "refreshToken", refreshToken));
+        String role = jwtService.extractUserRole(accessToken);
+        String msg = "Hello "+ (role.equals("ROLE_ADMIN") ? "Admin" : "Customer");
+
+        return ResponseEntity.ok(Map.of("msg",msg,"accessToken", accessToken, "refreshToken", refreshToken));
     }
 
 
