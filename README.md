@@ -10,7 +10,7 @@ A Spring Boot REST API demonstrating JWT-based authentication and role-based acc
 - Spring Boot 3.3
 - Spring Security 6
 - JJWT 0.11.5
-- PostgreSQL (H2 for dev/testing)
+- PostgreSQL
 - Lombok
 
 ---
